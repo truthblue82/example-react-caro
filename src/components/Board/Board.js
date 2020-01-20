@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Square from '../Square/Square';
+import Line from '../Line/Line';
 
 class Board extends Component {
     constructor(props) {
@@ -55,6 +56,7 @@ class Board extends Component {
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
                 </div>
+                <Line number={3} />
             </div>
         );
     }

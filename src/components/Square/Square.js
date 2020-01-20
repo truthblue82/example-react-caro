@@ -1,5 +1,5 @@
 import React from 'react';
-import square from './Square.css';
+import './Square.css';
 
 
 function Square(props) {
