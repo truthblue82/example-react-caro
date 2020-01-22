@@ -1,46 +1,66 @@
 import React, {Component} from 'react';
 import Square from '../Square/Square';
 import Line from '../Line/Line';
+import utils from '../../utils';
 
 class Board extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            squares: Array(9).fill(null),
+        console.log(`constructor of Board`);
+        //let number = Math.pow(this.props.number, 2);
+        /*this.state = {
+            number: number,
+            squares: Array(number).fill(null),
             xIsNext: true
-        };
+        };*/
     }
 
     handleClick(i) {
         const squares = this.state.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
+        if (utils.calculateWinner(squares) || squares[i]) {
             return;
         }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
             squares: squares,
-            xIsNext: !this.state.xIsNext,
+            xIsNext: !this.state.xIsNext
         });
+    }
+
+    handleClickInLine(lid, sid) {
+        let id = lid * (sid + 1) - 1;
+        console.log(`handleClickInLine: ${lid} - ${id}`);
+        /*let squares = [...this.state.squares];
+        if(calculateWinner(squares) || squares[id]) {
+            return;
+        }
+        squares[id] = this.state.xIsNext ? 'X' : 'O';
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext
+        });*/
     }
 
     renderSquare(i) {
         return <Square 
             value={this.state.squares[i]} 
-            onClick={() => this.handleClick(i)}/>;
+            onClick={() => this.handleClick(i)} />;
     }
 
     render() {
-        const winner = calculateWinner(this.state.squares);
+        console.log(`render in Board`);
+        const winner = utils.calculateWinner(this.props.squares);
         let status;
         if (winner) {
             status = 'Winner: ' + winner;
         } else {
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            status = 'Next player: ' + (this.props.xIsNext ? 'X' : 'O');
         }
 
         return (
             <div>
                 <div className="status">{status}</div>
+                {/*
                 <div className="board-row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
@@ -56,30 +76,15 @@ class Board extends Component {
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
                 </div>
-                <Line number={3} />
+                */}
+                {this.props.number > 0 && 
+                    [...Array(this.props.number).fill(null)].map((line, lid) => {
+                        return <Line number={this.props.number} lid={lid+1} boardClick={this.props.gameClick} key={lid} squares={this.props.squares} />
+                    })
+                }
             </div>
         );
     }
 }
 
 export default Board;
-
-function calculateWinner(squares) {
-    const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
-        }
-    }
-    return null;
-}
