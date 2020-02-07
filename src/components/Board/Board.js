@@ -6,11 +6,10 @@ import utils from '../../utils';
 class Board extends Component {
     constructor(props) {
         super(props);
-        console.log(`constructor of Board`);
     }
 
     render() {
-        const winner = utils.calculateWinner(this.props.squares);
+        const winner = utils.calculateWinnerFull(this.props.squares)
         let status;
         if (winner) {
             status = 'Winner: ' + winner;

@@ -14,32 +14,21 @@ class App extends Component {
     squares: Array(9).fill(null),
     xIsNext: true
   }
-
-  componentDidMount(nextProps, nextState) {
-    console.log(``);
-  }
   
   clickHandler = (event, lid, sid) => {
-    console.log(`clickHandler: ${lid}:${sid} `);
     const squares = this.state.squares.slice();
     let idx = (lid - 1)*this.state.number + sid;
-    console.log(`idx: ${idx}`);
     
-    squares[idx] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
+    if(squares[idx] === null) {
+      squares[idx] = this.state.xIsNext ? 'X' : 'O';
+      this.setState({
         squares: squares,
         xIsNext: !this.state.xIsNext,
     });
+    }
 
-    let winner = utils.calculateWinnerFull(squares, lid - 1, sid);
+    let winner = utils.calculateWinnerFull(squares);
     if ( winner || squares[idx]) {
-        // let status;
-        // if (winner) {
-        //     status = 'Winner: ' + winner;
-        // } else {
-        //     status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-        // }
-        // this.setState({status: status});
         return;
     }
   }
